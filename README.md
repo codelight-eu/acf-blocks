@@ -1,6 +1,6 @@
 # page-builder
 
-Example:
+Procedural example:
 
 ```
 <?php
@@ -38,5 +38,71 @@ add_action('init', function() {
 
     $pageBuilder->registerBlockType($flexible);
 });
+
+```
+
+Class-based example:
+```
+<?php
+
+add_action('init', function () {
+
+    $pageBuilder = BlockManager::getInstance();
+    
+    $pageBuilder->init([
+        'blocktypes' => [
+            'Products\SimCards',
+        ],
+        'namespace'   => '\Codelight\Travelsim\Blocks\\',
+    ]);
+    
+});
+```
+
+And the actual class:
+```
+<?php
+
+namespace Codelight\Travelsim\Blocks\Products;
+
+use Codelight\PageBuilder\BlockType;
+
+class SimCards extends BlockType
+{
+    protected $config = [
+        'name'     => 'sim_cards',
+        'template' => 'partials.blocks.products-page.sim-cards',
+    ];
+
+    public function configureFields()
+    {
+        $this->fieldsBuilder
+            ->addTab('travelsim_by_zones')
+            ->addFlexibleContent('features_for_travelsim_zones')
+            ->addLayout('feature')
+            ->addWysiwyg('content')
+            ->addImage('image')
+            ->endFlexibleContent()
+            ->addTab('travelsim_worldwide')
+            ->addFlexibleContent('features_for_travelsim_worldwide')
+            ->addLayout('feature')
+            ->addWysiwyg('content')
+            ->addImage('image')
+            ->endFlexibleContent()
+            ->addTab('travelchat')
+            ->addFlexibleContent('features_for_travelchat')
+            ->addLayout('feature')
+            ->addWysiwyg('content')
+            ->addImage('image')
+            ->endFlexibleContent()
+            ->setLocation('page_template', '==', 'views/products.blade.php');
+    }
+
+    public function filterData($data)
+    {
+        $data['test'] = 'yolo';
+        return $data;
+    }
+}
 
 ```
