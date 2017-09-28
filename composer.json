@@ -1,5 +1,5 @@
 {
-  "name": "codelight/page-builder",
+  "name": "codelight/acf-blocks",
   "type": "package",
   "require": {
     "php": ">=7.0.0",
