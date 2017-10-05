@@ -1,6 +1,6 @@
 <?php
 
-namespace Codelight\PageBuilder;
+namespace Codelight\ACFBlocks;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -8,18 +8,18 @@ if (!defined('ABSPATH')) {
 
 /**
  * todo: consider getting rid of BlockRegistryTrait
- * todo: maybe we don't need post ID in ContentBuilder, as the ID is only used inside BlockManager to fetch data from ACF
+ * todo: maybe we don't need post ID in ContentBuilder, as the ID is only used inside Blocks to fetch data from ACF
  */
 
 /**
- * Class BlockManager
+ * Class Blocks
  * @package Codelight\ContentBuilder
  */
-class BlockManager
+class Blocks
 {
     use BlockTypeRegistryTrait;
 
-    /* @var BlockManager */
+    /* @var Blocks */
     protected static $instance;
 
     /* @var BlockTypeRegistry */
@@ -159,7 +159,8 @@ class BlockManager
 
     /**
      * @param array $config
-     * @return BlockManager
+     *
+     * @return Blocks
      */
     public static function getInstance()
     {

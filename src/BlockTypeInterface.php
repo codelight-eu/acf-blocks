@@ -1,6 +1,6 @@
 <?php
 
-namespace Codelight\PageBuilder;
+namespace Codelight\ACFBlocks;
 
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
