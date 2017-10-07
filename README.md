@@ -108,11 +108,11 @@ add_action('init', function() {
 ## Example 3: Setting up flexible layouts
 
 ## FAQ
-**Will using this library have an impact on performance?**
+**Will using this library have an impact on performance?**  
 No, it's just a really thin layer of abstraction. It doesn't do much, it just allows you to write better code.
 
-**I'm using [soberwp/controller](https://github.com/soberwp/controller) which already provides me with a Controller. Why should I use this library?**
+**I'm using [soberwp/controller](https://github.com/soberwp/controller) which already provides me with a Controller. Why should I use this library?**  
 The concept behind soberwp/controller is great, but it has a few major drawbacks. It doesn't have any use in the context of flexible layouts. At the time of writing (Oct 7, 2017), it also has some architectural quirks such as the App controller being constructed twice. Also, inheritance doesn't really work properly so if you want to use the same field groups in multiple layouts, you'll end up stuffing almost all of the code in the main App controller.
 
-**Actually, blocks aren't really Contollers..**
+**Actually, blocks aren't really Contollers..**  
 No, they're much closer to View Models. However, using that term probably won't get the point across to many Wordpress devs.
