@@ -1,17 +1,26 @@
 # ACF Blocks
-ACF Blocks is a lightweight library that provides a clean, object-oriented API to create and re-use ACF field groups and flexible layouts.
+ACF Blocks is a lightweight library that provides a clean, object-oriented API to create and render ACF field groups. 
+
+Your WordPress code base doesn't need to be a mess.
 
 ## Overview
-ACF Blocks introduces the concept of *blocks*, which are essentially Controllers for field groups and flexible layouts. Fields are created using the excellent [ACF Builder](https://github.com/StoutLogic/acf-builder) library. 
+ACF Blocks introduces the concept of *blocks*, which are essentially Controllers for field groups and flexible layouts. If this sounds scary or confusing, then read on: it's much simpler than it looks.
+
+Fields are created using the excellent [ACF Builder](https://github.com/StoutLogic/acf-builder) library. 
 
 The three main benefits of using ACF blocks are:
 - Speed up development of simple sites,
 - Provide a clean architecture for developing more complex sites,
 - Allow re-using blocks between projects.
 
-
+## Installation
+```
+composer require codelight/acf-blocks
+```
+If you're still not using Composer in 2017, then do yourself a **huge** favor and get started now. [todo: article] 
 
 ## Example 1: Quick procedural blocks
+As an example, let's go through creating and rendering a simple field group.
 ```php
 <?php
 // blocks.php
@@ -64,7 +73,8 @@ add_action('init', function() {
  * Template name: Image
  *
  * This is the page template where we will be rendering our block.
- * Calling `blocks()->get()` inside the Loop will return all pre-rendered blocks assigned to that specific page or post.
+ * Calling `blocks()->get()` inside the Loop will return all pre-rendered blocks 
+ * assigned to that specific page or post.
  */
 ?>
 <?php while (have_posts()) : the_post(); ?>
@@ -92,29 +102,10 @@ add_action('init', function() {
     </div>
 </section>
 ```
-That's all you need to do.
 
-## Example 2: encapsulate the block in a class
+## Example 2: Encapsulate the block in a class
 
-
-## Installation
-### Development
-In your theme's composer.json file, add the following:
-```
-"repositories": [
-    {
-      "url": "git@github.com:codelight-eu/acf-blocks.git",
-      "type": "git"
-    }
-],
-"require": {
-    "codelight/acf-blocks": "dev-master"
-}
-```
-### Production
-```
-composer require codelight/acf-blocks
-```
+## Example 3: Setting up flexible layouts
 
 ## FAQ
 **Will using this library have an impact on performance?**
