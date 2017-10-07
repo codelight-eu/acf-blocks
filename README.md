@@ -1,12 +1,17 @@
 # ACF Blocks
-ACF Blocks is a lightweight library that provides a clean, object-oriented API to create and re-use ACF field groups and flexible layouts. Make WordPress development great again!
+ACF Blocks is a lightweight library that provides a clean, object-oriented API to create and re-use ACF field groups and flexible layouts.
 
 ## Overview
-ACF Blocks introduces the concept of *blocks*, which are essentially Controllers for field groups and flexible layouts. ACF Blocks greatly speeds up creating and rendering field groups for simple sites and provides a simple, clean class-based approach for more complex projects.
-Fields are created using the excellent [ACF Builder](https://github.com/StoutLogic/acf-builder) library. 
+ACF Blocks introduces the concept of *blocks*, which are essentially Controllers for field groups and flexible layouts. Fields are created using the excellent [ACF Builder](https://github.com/StoutLogic/acf-builder) library. 
 
-## Example 1: quickly creating a simple field block and rendering it
-First, create a block, define the field group and data processing callback function like so:
+The three main benefits of using ACF blocks are:
+- Speed up development of simple sites,
+- Provide a clean architecture for developing more complex sites,
+- Allow re-using blocks between projects.
+
+
+
+## Example 1: Quick procedural blocks
 ```php
 <?php
 // blocks.php
@@ -53,20 +58,28 @@ add_action('init', function() {
     $blocks->registerBlock($imageBlock);
 }
 ```
-Next, create the page template. In the Loop, fetch and echo the newly created block.
 ```php
 <?php
-// template-image.php
+/**
+ * Template name: Image
+ *
+ * This is the page template where we will be rendering our block.
+ * Calling `blocks()->get()` inside the Loop will return all pre-rendered blocks assigned to that specific page or post.
+ */
+?>
 <?php while (have_posts()) : the_post(); ?>
     <?php foreach (blocks()->get() as $block): ?>
         <?= $block; ?>
     <?php endforeach; ?>
 <?php endwhile; ?>
 ```
-Finally, create a simple template for the block.
 ```php
 <?php
-// templates/blocks/image.php
+/**
+ * This is the template of the single block.
+ * Data is injected automatically.
+ */
+?>
 <section class="section-image">
     <?= $image; ?>
     <div class="description">
@@ -79,7 +92,7 @@ Finally, create a simple template for the block.
     </div>
 </section>
 ```
-That's it.
+That's all you need to do.
 
 ## Example 2: encapsulate the block in a class
 
