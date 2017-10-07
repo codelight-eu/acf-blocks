@@ -67,6 +67,7 @@ add_action('init', function() {
 ```
 ```php
 <?php
+// template-image.php
 /**
  * Template name: Image
  *
@@ -83,6 +84,7 @@ add_action('init', function() {
 ```
 ```php
 <?php
+// templates/blocks/image.php
 /**
  * This is the template of the single block.
  * Data is injected automatically.
