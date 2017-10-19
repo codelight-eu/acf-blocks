@@ -122,6 +122,12 @@ class Blocks
         $blockTypeNames = $this->acf->getPostBlockTypeNames($postId);
 
         foreach ($blockTypeNames as $blockTypeName) {
+
+            // Todo: remove
+            if ($blockTypeName != 'travelsim-add-to-cart') {
+                continue;
+            }
+
             $blockType = $this->blockTypeRegistry->getBlockType($blockTypeName);
             $block     = $blockType->createBlock();
 

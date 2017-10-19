@@ -15,7 +15,7 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
 class BlockType implements BlockTypeInterface
 {
     /* @var string */
-    protected $blockClass = 'Codelight\PageBuilder\Block';
+    protected $blockClass = 'Codelight\ACFBlocks\Block';
 
     /* @var array */
     protected $config = [];
@@ -63,6 +63,10 @@ class BlockType implements BlockTypeInterface
      */
     public function createBlock()
     {
+        if (method_exists($this, 'build')) {
+            $this->build();
+        }
+
         return new $this->blockClass($this);
     }
 
