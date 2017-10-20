@@ -123,12 +123,13 @@ class Blocks
 
         foreach ($blockTypeNames as $blockTypeName) {
 
-            // Todo: remove
-            if ($blockTypeName != 'travelsim-add-to-cart') {
+            $blockType = $this->blockTypeRegistry->getBlockType($blockTypeName);
+
+            // Handle field groups that are not created using ACF Blocks
+            if (!$blockType) {
                 continue;
             }
 
-            $blockType = $this->blockTypeRegistry->getBlockType($blockTypeName);
             $block     = $blockType->createBlock();
 
             $data = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
