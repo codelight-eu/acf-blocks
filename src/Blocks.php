@@ -9,6 +9,7 @@ if (!defined('ABSPATH')) {
 /**
  * todo: consider getting rid of BlockRegistryTrait
  * todo: maybe we don't need post ID in ContentBuilder, as the ID is only used inside Blocks to fetch data from ACF
+ * todo: check dependencies (ACF version)
  */
 
 /**
@@ -27,6 +28,9 @@ class Blocks
 
     /* @var ACF */
     protected $acf;
+
+    /* @var array */
+    protected $builders = [];
 
     /**
      * ContentBuilder constructor
@@ -142,18 +146,6 @@ class Blocks
     }
 
     /**
-     * Get populated content builder
-     *
-     * @param $postId
-     * @return ContentBuilder
-     */
-    public function getBuilder($postId)
-    {
-        $blocks = $this->getBlocksByPostId($postId);
-        return new ContentBuilder($postId, $blocks);
-    }
-
-    /**
      * Get an instantiated block type object
      *
      * @param $blockTypeName
@@ -162,6 +154,66 @@ class Blocks
     public function getBlockType($blockTypeName)
     {
         return $this->blockTypeRegistry->getBlockType($blockTypeName);
+    }
+
+    /**
+     * Fetch all rendered blocks
+     *
+     * @param $postId
+     */
+    public function get($postId = null)
+    {
+        $postId = $this->resolvePostId($postId);
+        $builder = $this->getBuilder($postId);
+        return $builder->getRenderedBlocks();
+    }
+
+    /**
+     * Get populated content builder
+     *
+     * @param $postId
+     * @return ContentBuilder
+     */
+    public function getBuilder($postId = null)
+    {
+        $postId = $this->resolvePostId($postId);
+
+        if (!isset($this->builders[$postId])) {
+            $this->builders[$postId] = $this->createContentBuilder($postId);
+        }
+
+        return $this->builders[$postId];
+    }
+
+    /**
+     * @param $postId
+     *
+     * @return int
+     */
+    protected function resolvePostId($postId)
+    {
+        // todo: sanity checks?
+
+        if ($postId) {
+            return $postId;
+        }
+
+        global $post;
+        return $post->ID;
+    }
+
+    /**
+     * Factory method to create a new ContentBuilder
+     *
+     * @param $postId
+     * @param $blocks
+     *
+     * @return ContentBuilder
+     */
+    protected function createContentBuilder($postId)
+    {
+        $blocks = $this->getBlocksByPostId($postId);
+        return new ContentBuilder($postId, $blocks);
     }
 
     /**

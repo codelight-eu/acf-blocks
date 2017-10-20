@@ -18,6 +18,9 @@ class ContentBuilder
     /* @var array */
     protected $blocks = [];
 
+    /* @var array */
+    protected $renderedBlocks = [];
+
     /**
      * ContentBuilder constructor.
      *
@@ -42,7 +45,7 @@ class ContentBuilder
     }
 
     /**
-     * Get prepared blocks from current builder
+     * Get prepared blocks
      *
      * @return array
      */
@@ -52,21 +55,31 @@ class ContentBuilder
     }
 
     /**
+     * Get prepared and rendered blocks
+     *
+     * @return array
+     */
+    public function getRenderedBlocks()
+    {
+        if (empty($this->renderedBlocks)) {
+            $this->renderBlocks();
+        }
+
+        return $this->renderedBlocks;
+    }
+
+    /**
      * Get array of rendered blocks
      *
      * @return array
      */
-    public function renderBlocks()
+    protected function renderBlocks()
     {
-        $blocks = [];
-
         if (count($this->blocks)) {
             foreach ($this->blocks as $name => $block) {
-                $blocks[$name] = $this->renderBlock($name);
+                $this->renderedBlocks[$name] = $this->renderBlock($name);
             }
         }
-
-        return $blocks;
     }
 
     /**
