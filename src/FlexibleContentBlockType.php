@@ -100,9 +100,9 @@ class FlexibleContentBlockType extends BlockType
         // Create a new Builder, inject the blocks
         $builder = new ContentBuilder($this->getName(), $blocks);
         // And let it render the blocks
-        $renderedBlocks = $builder->renderBlocks();
+        $data['blocks'] = $builder->getRenderedBlocks();
 
-        return $renderedBlocks;
+        return $data;
     }
 
     /**

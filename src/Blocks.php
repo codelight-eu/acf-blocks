@@ -7,6 +7,7 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * todo: rename to ACFBlocks?
  * todo: consider getting rid of BlockRegistryTrait
  * todo: maybe we don't need post ID in ContentBuilder, as the ID is only used inside Blocks to fetch data from ACF
  * todo: check dependencies (ACF version)
@@ -220,8 +221,6 @@ class Blocks
     }
 
     /**
-     * @param array $config
-     *
      * @return Blocks
      */
     public static function getInstance()
