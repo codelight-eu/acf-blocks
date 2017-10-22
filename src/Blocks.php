@@ -10,6 +10,9 @@ if (!defined('ABSPATH')) {
  * todo: consider getting rid of BlockRegistryTrait
  * todo: maybe we don't need post ID in ContentBuilder, as the ID is only used inside Blocks to fetch data from ACF
  * todo: check dependencies (ACF version)
+ * todo: allow the user to set via config whether or not they want variables injected straight into the template or inside $data
+ *
+ * todo: bigger problem. Writing data into member variables of a BlockType instance is a shitty idea, but it's not immediately obvious
  */
 
 /**

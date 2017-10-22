@@ -73,7 +73,7 @@ class ContentBuilder
      *
      * @return array
      */
-    protected function renderBlocks()
+    public function renderBlocks()
     {
         if (count($this->blocks)) {
             foreach ($this->blocks as $name => $block) {
