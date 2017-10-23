@@ -89,6 +89,13 @@ class FlexibleContentBlockType extends BlockType
         foreach ($flexibleContentData as $layout) {
             // Get the block type object
             $blockType = $this->getBlockType($layout['acf_fc_layout']);
+
+            // Check if the block type exists, i.e. that this is a valid FC Layout
+            // (Old, not cleaned up layouts might still exist in the database)
+            if (!$blockType) {
+                continue;
+            }
+
             // Create the block
             $block = $blockType->createBlock();
             // Set the data (which we already have from ACF)

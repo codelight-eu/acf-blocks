@@ -42,8 +42,6 @@ class ACF
         $blockTypeNames = [];
         $fieldGroups    = acf_get_field_groups(['post_id' => $postId]);
 
-        // todo: this handles ALL field groups!!
-
         foreach ($fieldGroups as $fieldGroup) {
             // Remove ACF-s internal prefix
             $blockTypeNames[] = substr($fieldGroup['key'], 6);
