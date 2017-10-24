@@ -173,6 +173,21 @@ class Blocks
     }
 
     /**
+     * Get a block by name
+     *
+     * @param      $name
+     * @param null $postId
+     *
+     * @return null|BlockInterface
+     */
+    public function getByName($name, $postId = null)
+    {
+        $postId = $this->resolvePostId($postId);
+        $builder = $this->getBuilder($postId);
+        return $builder->getBlock($name);
+    }
+
+    /**
      * Get populated content builder
      *
      * @param $postId
