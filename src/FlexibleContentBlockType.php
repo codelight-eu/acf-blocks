@@ -93,10 +93,13 @@ class FlexibleContentBlockType extends BlockType
             // Check if the block type exists, i.e. that this is a valid FC Layout
             // (Old, not cleaned up layouts might still exist in the database)
             if (!$blockType) {
-                trigger_error(
-                    "Skipping flexible content layout {$layout['acf_fc_layout']} which does not have a valid BlockType.",
-                    E_USER_NOTICE
-                );
+                // todo: debug mode
+                if (false) {
+                    trigger_error(
+                        "Skipping flexible content layout {$layout['acf_fc_layout']} which does not have a valid BlockType.",
+                        E_USER_NOTICE
+                    );
+                }
                 continue;
             }
 
