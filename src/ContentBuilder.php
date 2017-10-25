@@ -41,7 +41,11 @@ class ContentBuilder
      */
     public function getBlock($name)
     {
-        return $this->blocks[$name];
+        if (isset($this->blocks[$name])) {
+            return $this->blocks[$name];
+        }
+
+        return null;
     }
 
     /**
@@ -92,6 +96,10 @@ class ContentBuilder
     public function renderBlock($name, $template = null)
     {
         $block = $this->getBlock($name);
+
+        if (!$block) {
+            return false;
+        }
 
         if (!$template) {
             $template = $block->getTemplate();
