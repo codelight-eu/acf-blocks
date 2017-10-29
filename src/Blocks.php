@@ -218,7 +218,12 @@ class Blocks
         }
 
         global $post;
-        return $post->ID;
+
+        if ($post) {
+            return $post->ID;
+        }
+
+        return null;
     }
 
     /**
