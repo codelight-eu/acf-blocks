@@ -17,6 +17,9 @@ class BlockType implements BlockTypeInterface
     /* @var string */
     protected $blockClass = 'Codelight\ACFBlocks\Block';
 
+    /* @var string */
+    protected $name;
+
     /* @var array */
     protected $config = [];
 
@@ -32,10 +35,11 @@ class BlockType implements BlockTypeInterface
      * BlockType constructor.
      * @param array $config
      */
-    public function __construct(array $config = [])
+    public function __construct($name, array $config = [])
     {
+        $this->name = $name;
         $this->config        = $this->config + $config;
-        $this->fieldsBuilder = new FieldsBuilder($this->config['name']);
+        $this->fieldsBuilder = new FieldsBuilder($this->name);
 
         $this->setup();
     }
@@ -75,7 +79,7 @@ class BlockType implements BlockTypeInterface
      */
     public function getName()
     {
-        return $this->config['name'];
+        return $this->name;
     }
 
     /**
