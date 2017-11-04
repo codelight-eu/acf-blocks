@@ -59,7 +59,27 @@ class ContentBuilder
     }
 
     /**
-     * Get prepared and rendered blocks
+     * Get a prepared and rendered block block by name
+     *
+     * @param $name
+     *
+     * @return mixed|null
+     */
+    public function getRenderedBlock($name)
+    {
+        if (empty($this->renderedBlocks)) {
+            $this->renderBlocks();
+        }
+
+        if (isset($this->renderedBlocks[$name])) {
+            return $this->renderedBlocks[$name];
+        }
+
+        return null;
+    }
+
+    /**
+     * Get all prepared and rendered blocks
      *
      * @return array
      */

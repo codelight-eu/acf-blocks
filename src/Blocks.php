@@ -188,6 +188,21 @@ class Blocks
     }
 
     /**
+     * Get a rendered block by name
+     *
+     * @param      $name
+     * @param null $postId
+     *
+     * @return array
+     */
+    public function getRenderedBlockByName($name, $postId = null)
+    {
+        $postId = $this->resolvePostId($postId);
+        $builder = $this->getBuilder($postId);
+        return $builder->getRenderedBlock($name);
+    }
+
+    /**
      * Get populated content builder
      *
      * @param $postId
