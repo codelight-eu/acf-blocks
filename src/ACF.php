@@ -39,12 +39,43 @@ class ACF
      */
     public function getPostBlockTypeNames($postId)
     {
+        if ('option' === $postId) {
+            return $this->getGlobalBlockTypeNames();
+        }
+
         $blockTypeNames = [];
         $fieldGroups    = acf_get_field_groups(['post_id' => $postId]);
 
         foreach ($fieldGroups as $fieldGroup) {
             // Remove ACF-s internal prefix
             $blockTypeNames[] = substr($fieldGroup['key'], 6);
+        }
+
+        return $blockTypeNames;
+    }
+
+    /**
+     * Get names of all global field groups
+     *
+     * @return array
+     */
+    public function getGlobalBlockTypeNames()
+    {
+        $blockTypeNames = [];
+        $fieldGroups    = acf_get_field_groups();
+
+        // Parse all Options Page field groups
+        foreach ($fieldGroups as $fieldGroup) {
+            if (isset($fieldGroup['location']) && count($fieldGroup['location'])) {
+                foreach ($fieldGroup['location'] as $location) {
+                    foreach ($location as $rule) {
+                        if ('options_page' === $rule['param'] && '==' === $rule['operator']) {
+                            // Remove ACF-s internal prefix
+                            $blockTypeNames[] = substr($fieldGroup['key'], 6);
+                        }
+                    }
+                }
+            }
         }
 
         return $blockTypeNames;

@@ -173,6 +173,17 @@ class Blocks
     }
 
     /**
+     * Fetch all rendered global blocks
+     *
+     * @return array
+     */
+    public function getGlobal()
+    {
+        $builder = $this->getBuilder('option');
+        return $builder->getRenderedBlocks();
+    }
+
+    /**
      * Get a block by name
      *
      * @param      $name

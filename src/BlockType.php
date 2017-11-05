@@ -35,10 +35,14 @@ class BlockType implements BlockTypeInterface
      * BlockType constructor.
      * @param array $config
      */
-    public function __construct($name, array $config = [])
+    public function __construct(array $config = [])
     {
-        $this->name = $name;
         $this->config        = $this->config + $config;
+
+        if (!$this->name) {
+            $this->name = $this->config['name'];
+        }
+
         $this->fieldsBuilder = new FieldsBuilder($this->name);
 
         $this->setup();
