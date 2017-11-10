@@ -2,7 +2,7 @@
 
 namespace Codelight\ACFBlocks;
 
-if (!defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
     exit;
 }
 
@@ -33,13 +33,14 @@ class BlockType implements BlockTypeInterface
      * todo: add support for DI
      *
      * BlockType constructor.
+     *
      * @param array $config
      */
     public function __construct(array $config = [])
     {
-        $this->config        = $this->config + $config;
+        $this->config = $this->config + $config;
 
-        if (!$this->name) {
+        if ( ! $this->name) {
             $this->name = $this->config['name'];
         }
 
@@ -99,7 +100,7 @@ class BlockType implements BlockTypeInterface
      */
     public function getTemplate()
     {
-        if (!isset($this->config['template']) || empty($this->config['template'])) {
+        if ( ! isset($this->config['template']) || empty($this->config['template'])) {
             trigger_error("Template not configured for block type {$this->getName()}", E_USER_ERROR);
         }
 

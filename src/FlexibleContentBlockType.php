@@ -137,7 +137,8 @@ class FlexibleContentBlockType extends BlockType
         // For the rest of the items, start count from 2
         // e.g. 'itemName-2'
         if (array_key_exists($name. '-' . $i, $blocks)) {
-            return $this->findUniqueIndex($name, $blocks, $i++);
+            $i++;
+            return $this->findUniqueIndex($name, $blocks, $i);
         }
 
         return $name. '-' . $i;
