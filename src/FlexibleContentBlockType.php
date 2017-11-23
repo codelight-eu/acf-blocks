@@ -36,7 +36,7 @@ class FlexibleContentBlockType extends BlockType
     protected function setupFlexibleContent()
     {
         $this->getFieldsBuilder()
-            ->addFlexibleContent($this->getName())
+            ->addFlexibleContent($this->getName(), ['button_label' => 'Add Block',])
             ->endFlexibleContent();
     }
 
