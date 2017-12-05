@@ -222,7 +222,12 @@ add_action('init', function() {
 });
 ```
 
-Now, you will have a flexible content area on every Page where you can add the ImageBlock. The ImageBlock will also be added to template-image.php as a regular, non-flexible block.
+Now, you will have a flexible content area on every Page where you can add the ImageBlock. Note that the ImageBlock will still be added to template-image.php as a regular (non-flexible-layout) block as well. The ImageBlock will use the same template in both cases. This provides an easy way to re-use blocks between templates, flexible content areas and even projects. It's also possible to use a different template in different situations (e.g. flexible layout vs regular page context), whilst keeping the backend code of the block the same.
+
+## Example 4: So why is this useful?
+One obvious answer is that once you get the general idea, it's about 10x faster compared to writing all the annoying template code by hand. However, the actual main advantage of using ACF Blocks is that it makes you architect things in one specific, clean, flexible and modular way. You now have a really good way to separate your templates and functionality. You can re-use and extend ACF field groups and blocks. You always know where to find your code. This approach speeds up the development of smaller projects but it really shines in the context of massive sites where you have lots of different fields and field groups.
+
+todo: more complex examples.
 
 ## FAQ
 **Will using this library have an impact on performance?**  
