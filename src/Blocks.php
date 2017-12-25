@@ -7,7 +7,6 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * todo: rename to ACFBlocks?
  * todo: consider getting rid of BlockRegistryTrait
  * todo: maybe we don't need post ID in ContentBuilder, as the ID is only used inside Blocks to fetch data from ACF
  * todo: check dependencies (ACF version)
@@ -133,12 +132,12 @@ class Blocks
 
             $blockType = $this->blockTypeRegistry->getBlockType($blockTypeName);
 
-            // Handle field groups that are not created using ACF Blocks
+            // Disregard field groups that are not created using ACF Blocks
             if (!$blockType) {
                 continue;
             }
 
-            $block     = $blockType->createBlock();
+            $block = $blockType->createBlock();
 
             $data = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
             $block->setData($data);

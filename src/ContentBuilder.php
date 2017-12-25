@@ -133,6 +133,7 @@ class ContentBuilder
         return \App\template(
             $template,
             [
+                'id'    => $name,
                 'data'  => $block->getData(),
                 'block' => $block,
             ]
