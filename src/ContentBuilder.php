@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) {
 
 /**
  * Class ContentBuilder
+ *
  * @package Codelight\ContentBuilder
  */
 class ContentBuilder
@@ -24,7 +25,7 @@ class ContentBuilder
     /**
      * ContentBuilder constructor.
      *
-     * @param $postId
+     * @param       $postId
      * @param array $blockTypes
      */
     public function __construct($postId, $blocks)
@@ -109,8 +110,8 @@ class ContentBuilder
     /**
      * Render one of the current builder's blocks by name
      *
-     * @param $name
-     * @param null $template
+     * @param         $name
+     * @param  null   $template
      * @return string
      */
     public function renderBlock($name, $template = null)
@@ -133,9 +134,9 @@ class ContentBuilder
         return \App\template(
             $template,
             [
-                'id'    => $name,
-                'data'  => $block->getData(),
-                'block' => $block,
+                'blockId' => $name,
+                'data'    => $block->getData(),
+                'block'   => $block,
             ]
         );
     }
