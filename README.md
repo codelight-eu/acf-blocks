@@ -4,7 +4,7 @@ ACF Blocks is a lightweight library that provides a clean, object-oriented API t
 Your WordPress code base doesn't have to be a mess.
 
 ## Overview
-ACF Blocks introduces the concept of *blocks*, which are essentially Controllers (todo:link) for field groups and flexible layouts. Fields are created using the excellent [ACF Builder](https://github.com/StoutLogic/acf-builder) library. 
+ACF Blocks introduces the concept of *blocks*, which are essentially Controllers (or actually ViewModels) for field groups and flexible layouts. Fields are created using the excellent [ACF Builder](https://github.com/StoutLogic/acf-builder) library. 
 
 The three main benefits of using ACF blocks are:
 - Speed up development of simple sites,
@@ -29,7 +29,7 @@ Once this repo is published, you'll be able to simply do this:
 ```
 composer require codelight/acf-blocks
 ```
-If you're still not using Composer in 2017, then do yourself a **huge** favor and get started now. [todo: article] 
+If you're still not using Composer in 2018, then do yourself a **huge** favor and get started now. [todo: article] 
 
 ## Example 1: Quick procedural blocks
 As an example, let's go through creating and rendering a simple field group.
@@ -227,14 +227,11 @@ Now, you will have a flexible content area on every Page where you can add the I
 ## Example 4: So why is this useful?
 One obvious answer is that once you get the general idea, it's about 10x faster compared to writing all the annoying template code by hand. However, the actual main advantage of using ACF Blocks is that it makes you architect things in one specific, clean, flexible and modular way. You now have a really good way to separate your templates and functionality. You can re-use and extend ACF field groups and blocks. You always know where to find your code. This approach speeds up the development of smaller projects but it really shines in the context of massive sites where you have lots of different fields and field groups.
 
-todo: more complex examples.
+todo: add more complex examples.
 
 ## FAQ
 **Will using this library have an impact on performance?**  
 No, it's just a really thin layer of abstraction. It doesn't do much, it just allows you to write better code.
 
 **I'm using [soberwp/controller](https://github.com/soberwp/controller) which already provides me with a Controller. Why should I use this library?**  
-The concept behind soberwp/controller is great, but it has a few major drawbacks. It doesn't have any use in the context of flexible layouts. At the time of writing (Oct 7, 2017), it also has some architectural quirks such as the App controller being constructed twice. Also, inheritance doesn't really work properly so if you want to use the same field groups in multiple layouts, you'll end up stuffing almost all of the code in the main App controller.
-
-**Actually, blocks aren't really Contollers..**  
-No, they're much closer to View Models. However, using that term probably won't get the point across to many Wordpress devs.
+The concept behind soberwp/controller is great, but it doesn't have much use in the context of flexible layouts.
