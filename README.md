@@ -3,7 +3,7 @@ ACF Blocks is a lightweight library that provides a clean, object-oriented API t
 
 Your WordPress code base doesn't have to be a mess.
 
-*This library is in beta. Use at your own risk.*
+**This library is in beta. Use at your own risk. All contributions are super welcome.**
 
 ## Overview
 ACF Blocks introduces the concept of *blocks*, which are essentially Controllers (or actually ViewModels) for field groups and flexible layouts. Fields are created using the excellent [ACF Builder](https://github.com/StoutLogic/acf-builder) library. 
