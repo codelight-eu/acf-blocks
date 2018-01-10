@@ -14,20 +14,6 @@ The three main benefits of using ACF blocks are:
 - Allow re-using blocks between projects.
 
 ## Installation
-In your composer.json file:
-```
-"repositories": [
-    {
-      "url": "git@github.com:codelight-eu/acf-blocks.git",
-      "type": "git"
-    }
-],
-"require": {
-  "codelight/acf-blocks": "dev-master"
-}
-```
-
-Once this repo is published, you'll be able to simply do this:
 ```
 composer require codelight/acf-blocks
 ```
