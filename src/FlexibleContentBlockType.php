@@ -53,7 +53,7 @@ class FlexibleContentBlockType extends BlockType
 
         $this->getFieldsBuilder()
             ->getField($this->getName())
-            ->addLayout($blockType->getName())
+            ->addLayout($blockType->getName(), ['title' => $blockType->getTitle()])
             ->addFields($blockType->getFieldsBuilder());
 
         $this->blockTypeRegistry->registerBlockType($blockType);

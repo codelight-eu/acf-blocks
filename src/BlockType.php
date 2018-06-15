@@ -88,6 +88,14 @@ class BlockType implements BlockTypeInterface
     }
 
     /**
+    * @return mixed
+    */
+    public function getTitle()
+    {
+        return $this->getFieldsBuilder()->getGroupConfig('title') ? $this->getFieldsBuilder()->getGroupConfig('title') : $this->getName();
+    }
+
+    /**
      * @return FieldsBuilder
      */
     public function getFieldsBuilder()
