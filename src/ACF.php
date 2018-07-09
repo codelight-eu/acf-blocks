@@ -21,6 +21,9 @@ class ACF
      */
     public function registerBlockTypeFields(BlockTypeInterface $blockType)
     {
+        if (!function_exists('acf_add_local_field_group')) {
+            return;
+        }
         $fieldsBuilder = $blockType->getFieldsBuilder();
 
         if ($fieldsBuilder) {
