@@ -42,7 +42,7 @@ class Block implements BlockInterface
     {
         // Pass data through registered callbacks
         // This allows comfortably overriding data if the block type is defined procedurally
-        if (count($this->blockType->getCallbacks())) {
+        if (is_array($this->blockType->getCallbacks()) && count($this->blockType->getCallbacks())) {
             foreach ($this->blockType->getCallbacks() as $callback) {
                 if (is_callable($callback)) {
                     $data = call_user_func($callback, $data);
