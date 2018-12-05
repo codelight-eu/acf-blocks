@@ -8,6 +8,7 @@ if (!defined('ABSPATH')) {
 
 /**
  * Class FlexibleContentBlockType
+ *
  * @package Codelight\PageBuilder
  */
 class FlexibleContentBlockType extends BlockType
@@ -36,8 +37,8 @@ class FlexibleContentBlockType extends BlockType
     protected function setupFlexibleContent()
     {
         $this->getFieldsBuilder()
-            ->addFlexibleContent($this->getName(), ['button_label' => 'Add Block',])
-            ->endFlexibleContent();
+             ->addFlexibleContent($this->getName(), ['button_label' => 'Add Block',])
+             ->endFlexibleContent();
     }
 
     /**
@@ -52,20 +53,20 @@ class FlexibleContentBlockType extends BlockType
         }
 
         $this->getFieldsBuilder()
-            ->getField($this->getName())
-            ->addLayout($blockType->getName(), ['title' => $blockType->getTitle()])
-            ->addFields($blockType->getFieldsBuilder());
+             ->getField($this->getName())
+             ->addLayout($blockType->getName(), ['title' => $blockType->getTitle()])
+             ->addFields($blockType->getFieldsBuilder());
 
         $this->blockTypeRegistry->registerBlockType($blockType);
     }
 
     /**
-     * Render the registered blocks
+     * Get the contained Block objects from this Flexible Content block
      *
      * @param $data
      * @return array|string
      */
-    public function renderRegisteredBlocks($data)
+    protected function getBlocks($data)
     {
         /**
          * Fetch the data of the main flexible content field.
@@ -111,6 +112,31 @@ class FlexibleContentBlockType extends BlockType
             $blocks[$this->findUniqueIndex($blockType->getName(), $blocks)] = $block;
         }
 
+        return $blocks;
+    }
+
+    /**
+     * Get the registered blocks
+     *
+     * @param $data
+     * @return array|string
+     */
+    public function getRegisteredBlockObjects($data)
+    {
+        $data['blocks'] = $this->getBlocks($data);
+
+        return $data;
+    }
+
+    /**
+     * Render the registered blocks
+     *
+     * @param $data
+     * @return array|string
+     */
+    public function renderRegisteredBlocks($data)
+    {
+        $blocks = $this->getBlocks($data);
         // Create a new Builder, inject the blocks
         $builder = new ContentBuilder($this->getName(), $blocks);
         // And let it render the blocks
@@ -122,8 +148,8 @@ class FlexibleContentBlockType extends BlockType
     /**
      * Find a unique name for block in the flexible layout
      *
-     * @param $name
-     * @param $blocks
+     * @param     $name
+     * @param     $blocks
      * @param int $i
      * @return string
      */
@@ -136,11 +162,11 @@ class FlexibleContentBlockType extends BlockType
 
         // For the rest of the items, start count from 2
         // e.g. 'itemName-2'
-        if (array_key_exists($name. '-' . $i, $blocks)) {
+        if (array_key_exists($name . '-' . $i, $blocks)) {
             $i++;
             return $this->findUniqueIndex($name, $blocks, $i);
         }
 
-        return $name. '-' . $i;
+        return $name . '-' . $i;
     }
 }

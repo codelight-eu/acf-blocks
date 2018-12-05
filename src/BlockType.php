@@ -138,4 +138,18 @@ class BlockType implements BlockTypeInterface
     {
         $this->callbacks[] = $callback;
     }
+
+    /**
+     * @param callable $callback
+     */
+    public function removeCallback(callable $callback)
+    {
+        $index = array_search($callback, $this->callbacks);
+
+        if ($index !== false) {
+            unset($this->callbacks[$index]);
+        } else {
+            trigger_error("Attempting to remove a callback that doesn't exist.", E_USER_WARNING);
+        }
+    }
 }
