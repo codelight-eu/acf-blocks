@@ -160,7 +160,7 @@ class Blocks
     }
 
     /**
-     * Fetch all rendered blocks
+     * Fetch all rendered blocks associated with a given Post
      *
      * @param $postId
      */
@@ -172,6 +172,19 @@ class Blocks
     }
 
     /**
+     * Fetch all block objects associated with a given Post without rendering them
+     *
+     * @param null $postId
+     * @return array
+     */
+    public function getBlockObjects($postId = null)
+    {
+        $postId = $this->resolvePostId($postId);
+        $builder = $this->getBuilder($postId);
+        return $builder->getBlocks();
+    }
+
+    /**
      * Fetch all rendered global blocks
      *
      * @return array
@@ -180,6 +193,18 @@ class Blocks
     {
         $builder = $this->getBuilder('option');
         return $builder->getRenderedBlocks();
+    }
+
+    /**
+     * Fetch all global block objects without rendering them
+     *
+     * @param null $postId
+     * @return array
+     */
+    public function getGlobalBlockObjects()
+    {
+        $builder = $this->getBuilder('option');
+        return $builder->getBlocks();
     }
 
     /**

@@ -128,7 +128,7 @@ class ContentBuilder
 
         // Allow overriding the render method in BlockType class
         if (method_exists($block->getBlockType(), 'render')) {
-            return $block->getBlockType()->render();
+            return $block->getBlockType()->render($block);
         }
 
         return \App\template(
