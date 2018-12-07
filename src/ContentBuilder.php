@@ -100,7 +100,7 @@ class ContentBuilder
      */
     public function renderBlocks()
     {
-        if (count($this->blocks)) {
+        if (is_array($this->blocks) && count($this->blocks)) {
             foreach ($this->blocks as $name => $block) {
                 $this->renderedBlocks[$name] = $this->renderBlock($name);
             }
