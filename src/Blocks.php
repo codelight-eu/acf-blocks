@@ -74,9 +74,13 @@ class Blocks
         // If both 'blocktypes' and 'namespace' keys are set, assume we have an array of non-namespaced classes
         // so let's add the namespace automatically
         if (array_key_exists('namespace', $config) && array_key_exists('blocktypes', $config)) {
+
+            // Add trailing slash if it's missing
+            $namespace = rtrim($config['namespace'], '\\') . '\\';
+
             foreach ($config['blocktypes'] as &$blockType) {
                 if (is_string($blockType)) {
-                    $blockType = $config['namespace'] . $blockType;
+                    $blockType = $namespace . $blockType;
                 }
             }
         }
