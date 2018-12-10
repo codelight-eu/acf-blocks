@@ -15,7 +15,7 @@ The three main benefits of using ACF blocks are:
 
 ## Installation
 ```
-composer require codelight/acf-blocks
+composer require codelight/acf-blocks dev-master
 ```
 If you're still not using Composer in 2018, then do yourself a **huge** favor and get started now. [todo: article] 
 
