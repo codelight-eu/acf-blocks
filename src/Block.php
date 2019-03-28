@@ -52,6 +52,9 @@ class Block implements BlockInterface
      */
     public function setData($data)
     {
+        // Add ID to the block's data
+        $data['block_id'] = $this->id;
+        
         // Pass data through registered callbacks
         // This allows comfortably overriding data if the block type is defined procedurally
         if (is_array($this->blockType->getCallbacks()) && count($this->blockType->getCallbacks())) {
