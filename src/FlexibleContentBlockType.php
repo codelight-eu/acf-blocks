@@ -106,10 +106,18 @@ class FlexibleContentBlockType extends BlockType
 
             // Create the block
             $block = $blockType->createBlock();
+            
+            // Generate an ID
+            $id = $this->findUniqueIndex($blockType->getName(), $blocks);
+            
+            // Set the ID
+            $block->setId($id);
+            
             // Set the data (which we already have from ACF)
             $block->setData($layout);
+            
             // Add it to the list of blocks
-            $blocks[$this->findUniqueIndex($blockType->getName(), $blocks)] = $block;
+            $blocks[$id] = $block;
         }
 
         return $blocks;
