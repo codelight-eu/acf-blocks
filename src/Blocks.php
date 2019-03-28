@@ -144,7 +144,9 @@ class Blocks
             $block = $blockType->createBlock();
 
             $data = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
-            $block->setData($data);
+            
+            $block->setId($blockTypeName);
+            $block->setData($data, $blockTypeName);
 
             $blocks[$blockTypeName] = $block;
         }
