@@ -29,6 +29,9 @@ class BlockType implements BlockTypeInterface
     /* @var FieldsBuilder */
     protected $fieldsBuilder;
 
+    /* @var array */
+    protected $settings = [];
+
     /**
      * todo: add support for DI
      *
@@ -63,6 +66,19 @@ class BlockType implements BlockTypeInterface
         if (method_exists($this, 'configureFields')) {
             $this->configureFields();
         }
+
+        // If any Settings have been defined, run them as well
+        if (!count($this->settings)) {
+            return;
+        }
+
+        $builder = $this->getFieldsBuilder();
+        $builder = $builder->addGroup('settings', ['label' => __('Block Settings', 'acf-blocks'), 'wrapper' => ['width' => 100]]);
+        foreach ($this->settings as $setting) {
+            /* @var SettingInterface $setting */
+            $builder = $builder->addFields($setting->getFieldsBuilder());
+        }
+        $builder = $builder->endGroup();
     }
 
     /**
@@ -151,5 +167,21 @@ class BlockType implements BlockTypeInterface
         } else {
             trigger_error("Attempting to remove a callback that doesn't exist.", E_USER_WARNING);
         }
+    }
+
+    /**
+     * @param SettingsInterface $setting
+     */
+    public function registerSetting(SettingInterface $setting)
+    {
+        $this->settings[] = $setting;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSettings()
+    {
+        return $this->settings;
     }
 }

@@ -50,4 +50,16 @@ interface BlockTypeInterface
      * @return array
      */
     public function getCallbacks();
+
+    /**
+     * @param SettingInterface $setting
+     * @return void
+     */
+    public function registerSetting(SettingInterface $setting);
+
+    /**
+     * @return array
+     */
+    public function getSettings();
+
 }

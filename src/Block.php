@@ -54,6 +54,16 @@ class Block implements BlockInterface
     {
         // Add ID to the block's data
         $data['block_id'] = $this->id;
+
+        // If any Settings have been registered, run the data through them
+        if (count($this->blockType->getSettings())) {
+            foreach ($this->blockType->getSettings() as $setting) {
+                /* @var SettingInterface $setting */
+                if (method_exists($setting, 'filterData')) {
+                    $data = $setting->filterData($data);
+                }
+            }
+        }
         
         // Pass data through registered callbacks
         // This allows comfortably overriding data if the block type is defined procedurally
