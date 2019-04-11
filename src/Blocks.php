@@ -17,6 +17,7 @@ if (!defined('ABSPATH')) {
 
 /**
  * Class Blocks
+ *
  * @package Codelight\ContentBuilder
  */
 class Blocks
@@ -143,10 +144,12 @@ class Blocks
 
             $block = $blockType->createBlock();
 
-            $data = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
-            
+            $data     = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
+            $settings = $this->acf->getPostBlockSettings($postId, $blockType->getFieldsBuilder(), 'settings');
+
             $block->setId($blockTypeName);
-            $block->setData($data, $blockTypeName);
+            $block->setSettings($data, $settings);
+            $block->setData($data, $settings);
 
             $blocks[$blockTypeName] = $block;
         }
@@ -172,7 +175,7 @@ class Blocks
      */
     public function get($postId = null)
     {
-        $postId = $this->resolvePostId($postId);
+        $postId  = $this->resolvePostId($postId);
         $builder = $this->getBuilder($postId);
         return $builder->getRenderedBlocks();
     }
@@ -185,7 +188,7 @@ class Blocks
      */
     public function getBlockObjects($postId = null)
     {
-        $postId = $this->resolvePostId($postId);
+        $postId  = $this->resolvePostId($postId);
         $builder = $this->getBuilder($postId);
         return $builder->getBlocks();
     }
@@ -223,7 +226,7 @@ class Blocks
      */
     public function getByName($name, $postId = null)
     {
-        $postId = $this->resolvePostId($postId);
+        $postId  = $this->resolvePostId($postId);
         $builder = $this->getBuilder($postId);
         return $builder->getBlock($name);
     }
@@ -238,7 +241,7 @@ class Blocks
      */
     public function getRenderedBlockByName($name, $postId = null)
     {
-        $postId = $this->resolvePostId($postId);
+        $postId  = $this->resolvePostId($postId);
         $builder = $this->getBuilder($postId);
         return $builder->getRenderedBlock($name);
     }

@@ -112,9 +112,13 @@ class FlexibleContentBlockType extends BlockType
             
             // Set the ID
             $block->setId($id);
+
+            $settings = isset($layout['settings']) && is_array($layout['settings']) ? $layout['settings'] : [];
+
+            $block->setSettings($layout, $settings);
             
             // Set the data (which we already have from ACF)
-            $block->setData($layout);
+            $block->setData($layout, $settings);
             
             // Add it to the list of blocks
             $blocks[$id] = $block;

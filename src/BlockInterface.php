@@ -18,10 +18,23 @@ interface BlockInterface
     public function getData();
 
     /**
+     * @return array
+     */
+    public function getSettings();
+
+    /**
      * @param $data
+     * @param $settings
      * @return void
      */
-    public function setData($data);
+    public function setSettings(array $data, array $settings);
+
+    /**
+     * @param $data
+     * @param $settings
+     * @return void
+     */
+    public function setData(array $data, array $settings);
 
     /**
      * @return string

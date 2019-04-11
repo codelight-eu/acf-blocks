@@ -100,9 +100,27 @@ class ACF
         $data = [];
 
         foreach ($fieldGroup['fields'] as $field) {
+
             $data[$field['name']] = get_field($field['key'], $postId);
         }
 
         return $data;
+    }
+    
+    public function getPostBlockSettings($postId, FieldsBuilder $fieldsBuilder, $groupName)
+    {
+        // acf_get_field_groups() doesn't return the field names, so we'll need to build the
+        // config again to actually get them
+        $fieldGroup = $fieldsBuilder->build();
+
+        $settings = [];
+
+        foreach ($fieldGroup['fields'] as $field) {
+            if ($field['name'] === $groupName) {
+                $settings = get_field($field['key'], $postId);
+            }
+        }
+
+        return $settings;
     }
 }
