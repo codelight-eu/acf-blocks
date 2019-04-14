@@ -2,6 +2,8 @@
 
 namespace Codelight\ACFBlocks;
 
+use WhichBrowser\Constants\Id;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -66,7 +68,7 @@ class FlexibleContentBlockType extends BlockType
      * @param $data
      * @return array|string
      */
-    protected function getBlocks($data)
+    protected function getBlocks($data, $objectId)
     {
         /**
          * Fetch the data of the main flexible content field.
@@ -113,6 +115,9 @@ class FlexibleContentBlockType extends BlockType
             // Set the ID
             $block->setId($id);
 
+            // Also set the current object (page?) ID
+            $block->setObjectId($objectId);
+
             $settings = isset($layout['settings']) && is_array($layout['settings']) ? $layout['settings'] : [];
 
             $block->setSettings($layout, $settings);
@@ -146,9 +151,9 @@ class FlexibleContentBlockType extends BlockType
      * @param $data
      * @return array|string
      */
-    public function renderRegisteredBlocks($data)
+    public function renderRegisteredBlocks($data, $settings, $id, $objectId)
     {
-        $blocks = $this->getBlocks($data);
+        $blocks = $this->getBlocks($data, $objectId);
         // Create a new Builder, inject the blocks
         $builder = new ContentBuilder($this->getName(), $blocks);
         // And let it render the blocks
