@@ -21,7 +21,7 @@ interface BlockInterface
      * @param $data
      * @return void
      */
-    public function setData($data);
+    public function setData($data, $objectId);
 
     /**
      * @return string

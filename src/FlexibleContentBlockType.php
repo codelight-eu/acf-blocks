@@ -66,7 +66,7 @@ class FlexibleContentBlockType extends BlockType
      * @param $data
      * @return array|string
      */
-    protected function getBlocks($data)
+    protected function getBlocks($data, $objectId)
     {
         /**
          * Fetch the data of the main flexible content field.
@@ -114,7 +114,7 @@ class FlexibleContentBlockType extends BlockType
             $block->setId($id);
             
             // Set the data (which we already have from ACF)
-            $block->setData($layout);
+            $block->setData($layout, $objectId);
             
             // Add it to the list of blocks
             $blocks[$id] = $block;
@@ -142,11 +142,14 @@ class FlexibleContentBlockType extends BlockType
      * @param $data
      * @return array|string
      */
-    public function renderRegisteredBlocks($data)
+    public function renderRegisteredBlocks($data, $objectId)
     {
-        $blocks = $this->getBlocks($data);
+        // todo: how do we pass the object ID here?
+
+        $blocks = $this->getBlocks($data, $objectId);
         // Create a new Builder, inject the blocks
         $builder = new ContentBuilder($this->getName(), $blocks);
+
         // And let it render the blocks
         $data['blocks'] = $builder->getRenderedBlocks();
 
