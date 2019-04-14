@@ -50,7 +50,7 @@ class Block implements BlockInterface
      *
      * @param $data
      */
-    public function setData($data)
+    public function setData($data, $objectId)
     {
         // Add ID to the block's data
         $data['block_id'] = $this->id;
@@ -60,7 +60,7 @@ class Block implements BlockInterface
             foreach ($this->blockType->getSettings() as $setting) {
                 /* @var SettingInterface $setting */
                 if (method_exists($setting, 'filterData')) {
-                    $data = $setting->filterData($data);
+                    $data = $setting->filterData($data, $objectId);
                 }
             }
         }
@@ -70,7 +70,7 @@ class Block implements BlockInterface
         if (is_array($this->blockType->getCallbacks()) && count($this->blockType->getCallbacks())) {
             foreach ($this->blockType->getCallbacks() as $callback) {
                 if (is_callable($callback)) {
-                    $data = call_user_func($callback, $data);
+                    $data = call_user_func($callback, $data, $objectId);
                 } else {
                     trigger_error("A callback registered to {$this->getBlockTypeName()} is not callable.", E_USER_WARNING);
                 }
@@ -80,7 +80,7 @@ class Block implements BlockInterface
         // If a data filtering function is defined, pass data through it
         // This allows comfortably overriding data if the block type is defined as a child class
         if (method_exists($this->blockType, 'filterData')) {
-            $data = $this->blockType->filterData($data);
+            $data = $this->blockType->filterData($data, $objectId);
         }
 
         $this->data = $data;
