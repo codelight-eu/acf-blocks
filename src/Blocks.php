@@ -148,6 +148,8 @@ class Blocks
             $settings = $this->acf->getPostBlockSettings($postId, $blockType->getFieldsBuilder(), 'settings');
 
             $block->setId($blockTypeName);
+            $block->setObjectId($postId);
+
             $block->setSettings($data, $settings);
             $block->setData($data, $settings);
 

@@ -13,6 +13,9 @@ class Block implements BlockInterface
 
     /* @var string */
     protected $id;
+
+    /* @var string */
+    protected $objectId;
     
     /* @var array */
     protected $data;
@@ -39,6 +42,16 @@ class Block implements BlockInterface
         $this->id = $id;
     }
 
+    public function getObjectId()
+    {
+        return $this->objectId;
+    }
+
+    public function setObjectId($id)
+    {
+        $this->objectId = $id;
+    }
+
     /**
      * Return the block data
      *
@@ -61,7 +74,7 @@ class Block implements BlockInterface
             foreach ($this->blockType->getSettings() as $setting) {
                 /* @var SettingInterface $setting */
                 if (method_exists($setting, 'filterData')) {
-                    $settings = $setting->filterData($data, $settings, $this->id);
+                    $settings = $setting->filterData($data, $settings, $this->id, $this->objectId);
                 }
             }
         }
@@ -87,7 +100,7 @@ class Block implements BlockInterface
         if (is_array($this->blockType->getCallbacks()) && count($this->blockType->getCallbacks())) {
             foreach ($this->blockType->getCallbacks() as $callback) {
                 if (is_callable($callback)) {
-                    $data = call_user_func($callback, $data, $settings, $this->id);
+                    $data = call_user_func($callback, $data, $settings, $this->id, $this->objectId);
                 } else {
                     trigger_error("A callback registered to {$this->getBlockTypeName()} is not callable.", E_USER_WARNING);
                 }
@@ -97,7 +110,7 @@ class Block implements BlockInterface
         // If a data filtering function is defined, pass data through it
         // This allows comfortably overriding data if the block type is defined as a child class
         if (method_exists($this->blockType, 'filterData')) {
-            $data = $this->blockType->filterData($data, $settings, $this->id);
+            $data = $this->blockType->filterData($data, $settings, $this->id, $this->objectId);
         }
 
         $this->data = $data;
