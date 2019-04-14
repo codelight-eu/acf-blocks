@@ -102,7 +102,7 @@ class FlexibleContentBlockType extends BlockType
                     );
                 }
                 continue;
-            }
+            }   
 
             // Create the block
             $block = $blockType->createBlock();
