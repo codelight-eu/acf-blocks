@@ -76,7 +76,9 @@ class ContentBuilder
             return $this->renderedBlocks[$name];
         }
 
-        return null;
+        $block = $this->renderBlock($name, null, true);
+
+        return $block ? $block : null;
     }
 
     /**
@@ -102,7 +104,12 @@ class ContentBuilder
     {
         if (is_array($this->blocks) && count($this->blocks)) {
             foreach ($this->blocks as $name => $block) {
-                $this->renderedBlocks[$name] = $this->renderBlock($name);
+
+                $block = $this->renderBlock($name);
+
+                if ($block) {
+                    $this->renderedBlocks[$name] = $block;
+                }
             }
         }
     }
@@ -114,11 +121,17 @@ class ContentBuilder
      * @param  null   $template
      * @return string
      */
-    public function renderBlock($name, $template = null)
+    public function renderBlock($name, $template = null, $forceRender = false)
     {
         $block = $this->getBlock($name);
 
         if (!$block) {
+            return false;
+        }
+
+        $config = $block->getBlockType()->getConfig();
+
+        if (isset($config['autoload']) && !$config['autoload'] && !$forceRender) {
             return false;
         }
 

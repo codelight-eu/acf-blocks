@@ -11,10 +11,14 @@ class Block implements BlockInterface
     /* @var BlockTypeInterface */
     protected $blockType;
 
+    /* @var string */
     protected $id;
     
     /* @var array */
     protected $data;
+
+    /* @var array */
+    protected $config;
 
     /**
      * Block constructor.
@@ -24,12 +28,18 @@ class Block implements BlockInterface
     {
         $this->blockType = $blockType;
     }
-    
+
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
     }
-    
+
+    /**
+     * @param $id
+     */
     public function setId($id)
     {
         $this->id = $id;

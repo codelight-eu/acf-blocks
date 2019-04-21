@@ -61,5 +61,4 @@ interface BlockTypeInterface
      * @return array
      */
     public function getSettings();
-
 }

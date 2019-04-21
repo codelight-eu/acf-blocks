@@ -184,4 +184,12 @@ class BlockType implements BlockTypeInterface
     {
         return $this->settings;
     }
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
 }

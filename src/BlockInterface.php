@@ -18,6 +18,11 @@ interface BlockInterface
     public function getData();
 
     /**
+     * @param $id
+     */
+    public function setId($id);
+
+    /**
      * @param $data
      * @return void
      */
