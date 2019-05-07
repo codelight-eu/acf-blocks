@@ -23,6 +23,18 @@ class Block implements BlockInterface
     /* @var array */
     protected $settings;
 
+    /* @var array */
+    protected $blocks;
+
+    /* @var array */
+    protected $rawData;
+
+    /* @var array */
+    protected $rawSettings;
+
+    /* @var array */
+    protected $meta;
+
     /**
      * Block constructor.
      * @param $blockType
@@ -74,7 +86,7 @@ class Block implements BlockInterface
             foreach ($this->blockType->getSettings() as $setting) {
                 /* @var SettingInterface $setting */
                 if (method_exists($setting, 'filterData')) {
-                    $settings = $setting->filterData($data, $settings, $this->id, $this->objectId);
+                    $settings = $setting->filterData($data, $settings, $this->id, $this->objectId, $this->blocks);
                 }
             }
         }
@@ -100,7 +112,7 @@ class Block implements BlockInterface
         if (is_array($this->blockType->getCallbacks()) && count($this->blockType->getCallbacks())) {
             foreach ($this->blockType->getCallbacks() as $callback) {
                 if (is_callable($callback)) {
-                    $data = call_user_func($callback, $data, $settings, $this->id, $this->objectId);
+                    $data = call_user_func($callback, $data, $settings, $this->id, $this->objectId, $this->blocks);
                 } else {
                     trigger_error("A callback registered to {$this->getBlockTypeName()} is not callable.", E_USER_WARNING);
                 }
@@ -110,7 +122,7 @@ class Block implements BlockInterface
         // If a data filtering function is defined, pass data through it
         // This allows comfortably overriding data if the block type is defined as a child class
         if (method_exists($this->blockType, 'filterData')) {
-            $data = $this->blockType->filterData($data, $settings, $this->id, $this->objectId);
+            $data = $this->blockType->filterData($data, $settings, $this->id, $this->objectId, $this->blocks);
         }
 
         $this->data = $data;
@@ -138,5 +150,63 @@ class Block implements BlockInterface
     public function getBlockType()
     {
         return $this->blockType;
+    }
+
+    /**
+     * @param $blocks
+     */
+    public function setBlocks(array $blocks)
+    {
+        $this->blocks = $blocks;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRawData()
+    {
+        return $this->rawData;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function setRawData(array $data)
+    {
+        $this->rawData = $data;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRawSettings()
+    {
+        return $this->rawSettings;
+    }
+
+    /**
+     * @param array $settings
+     */
+    public function setRawSettings(array $settings)
+    {
+        $this->rawSettings = $settings;
+    }
+
+    /**
+     * @param $key
+     * @return mixed|null
+     */
+    public function getMeta($key)
+    {
+        return isset($this->meta[$key]) ? $this->meta[$key] : null;
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     */
+    public function setMeta($key, $value)
+    {
+        $this->meta[$key] = $value;
     }
 }

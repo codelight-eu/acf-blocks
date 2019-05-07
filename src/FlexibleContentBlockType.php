@@ -88,7 +88,8 @@ class FlexibleContentBlockType extends BlockType
         }
 
         $blocks = [];
-        // For every item in the layout
+
+        // For every item in the layout..
         foreach ($flexibleContentData as $layout) {
             // Get the block type object
             $blockType = $this->getBlockType($layout['acf_fc_layout']);
@@ -108,25 +109,37 @@ class FlexibleContentBlockType extends BlockType
 
             // Create the block
             $block = $blockType->createBlock();
-            
+
             // Generate an ID
             $id = $this->findUniqueIndex($blockType->getName(), $blocks);
-            
+
+            $settings = isset($layout['settings']) && is_array($layout['settings']) ? $layout['settings'] : [];
+
             // Set the ID
             $block->setId($id);
 
             // Also set the current object (page?) ID
             $block->setObjectId($objectId);
 
-            $settings = isset($layout['settings']) && is_array($layout['settings']) ? $layout['settings'] : [];
+            // Set unprocessed data
+            $block->setRawData($layout);
 
-            $block->setSettings($layout, $settings);
-            
-            // Set the data (which we already have from ACF)
-            $block->setData($layout, $settings);
-            
+            // Set unprocessed settings
+            $block->setRawSettings($settings);
+
             // Add it to the list of blocks
             $blocks[$id] = $block;
+
+            // Store the layout for later use
+            $layouts[$id] = $layout;
+        }
+
+        // On second loop, once each blocks has access to all the blocks' data in the current context.
+        // This allows making decisions based on which specific block comes before or after the current.
+        foreach ($blocks as $id => $block) {
+            $block->setBlocks($blocks);
+            $block->setSettings($block->getRawData(), $block->getRawSettings());
+            $block->setData($block->getRawData(), $block->getRawSettings());
         }
 
         return $blocks;

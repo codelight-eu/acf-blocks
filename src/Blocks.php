@@ -133,6 +133,7 @@ class Blocks
         $blocks         = [];
         $blockTypeNames = $this->acf->getPostBlockTypeNames($postId);
 
+        // Set up blocks
         foreach ($blockTypeNames as $blockTypeName) {
 
             $blockType = $this->blockTypeRegistry->getBlockType($blockTypeName);
@@ -144,16 +145,25 @@ class Blocks
 
             $block = $blockType->createBlock();
 
-            $data     = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
-            $settings = $this->acf->getPostBlockSettings($postId, $blockType->getFieldsBuilder(), 'settings');
-
             $block->setId($blockTypeName);
             $block->setObjectId($postId);
 
-            $block->setSettings($data, $settings);
-            $block->setData($data, $settings);
+            $data     = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
+            $settings = $this->acf->getPostBlockSettings($postId, $blockType->getFieldsBuilder(), 'settings');
+
+            $block->setRawData($data);
+            $block->setRawSettings($settings);
 
             $blocks[$blockTypeName] = $block;
+        }
+
+        // On second loop, once each blocks has access to all the blocks' data in the current context.
+        // This allows making decisions based on which specific block comes before or after the current.
+        foreach ($blocks as $blockTypeName => $block) {
+            /* @var $block Block */
+            $block->setBlocks($blocks);
+            $block->setSettings($block->getRawData(), $block->getRawSettings());
+            $block->setData($block->getRawData(), $block->getRawSettings());
         }
 
         return $blocks;

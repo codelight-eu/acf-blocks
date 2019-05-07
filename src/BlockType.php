@@ -184,4 +184,60 @@ class BlockType implements BlockTypeInterface
     {
         return $this->settings;
     }
+
+    /**
+     * @param $id
+     * @param $blocks
+     * @return Block|null
+     */
+    public function getPreviousBlock($id, $blocks)
+    {
+        return $this->getBlockByRelativePosition(-1, $id, $blocks);
+    }
+
+    /**
+     * @param $id
+     * @param $blocks
+     * @return Block|null
+     */
+    public function getCurrentBlock($id, $blocks)
+    {
+        return $this->getBlockByRelativePosition(0, $id, $blocks);
+    }
+
+    /**
+     * @param $id
+     * @param $blocks
+     * @return Block|null
+     */
+    public function getNextBlock($id, $blocks)
+    {
+        return $this->getBlockByRelativePosition(1, $id, $blocks);
+    }
+
+    /**
+     * @param $id
+     * @param $blocks
+     * @return Block|null
+     */
+    public function getBlockByRelativePosition($position, $id, $blocks)
+    {
+        $blockOrder = array_keys($blocks);
+        $blockNames = array_flip($blockOrder);
+
+        if (!isset($blockNames[$id])) {
+            return false;
+        }
+
+        $currentBlockIndex = $blockNames[$id];
+        $relativeIndex = $currentBlockIndex + $position;
+
+        if (!isset($blockOrder[$relativeIndex])) {
+            return false;
+        }
+
+        $relativeBlockName = $blockOrder[$relativeIndex];
+
+        return isset($blocks[$relativeBlockName]) ? $blocks[$relativeBlockName] : null;
+    }
 }
