@@ -15,6 +15,41 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
 class ACF
 {
     /**
+     * Set up hooks
+     */
+    public function __construct()
+    {
+        add_filter('acf/fields/flexible_content/layout_title', [$this, 'renderLayoutAdminLabel'], 10, 4);
+    }
+
+    /**
+     * If defined, render the admin label of each flexible layout.
+     * This can be defined separately for each block in admin.
+     *
+     * @param $title
+     * @param $field
+     * @param $layout
+     * @param $i
+     * @return string
+     */
+    public function renderLayoutAdminLabel($title, $field, $layout, $i)
+    {
+        foreach($layout['sub_fields'] as $sub) {
+            if ($sub['name'] == 'settings') {
+                $key1 = $sub['key'];
+                foreach ($sub['sub_fields'] as $sub2) {
+                    $key2 = $sub2['key'];
+                    if (array_key_exists($i, $field['value']) && stristr($key2, 'block_admin_label') && $value = $field['value'][$i][$key1][$key2]) {
+                        return "{$title} - {$value}";
+                    }
+                }
+            }
+        }
+
+        return $title;
+    }
+
+    /**
      * Register the field groups defined in the block type using acf_add_local_field_group()
      *
      * @param BlockTypeInterface $blockType
