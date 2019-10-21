@@ -12,10 +12,10 @@ use StoutLogic\AcfBuilder\FieldsBuilder;
  * Class Block
  * @package Codelight\ContentBuilder
  */
-class BlockType implements BlockTypeInterface
+abstract class BlockType implements BlockTypeInterface
 {
     /* @var string */
-    protected $blockClass = 'Codelight\ACFBlocks\Block';
+    protected $blockClass = Block::class;
 
     /* @var string */
     protected $name;
@@ -92,7 +92,7 @@ class BlockType implements BlockTypeInterface
             $this->build();
         }
 
-        return new $this->blockClass($this);
+        return \App\sage($this->blockClass,['type' => $this]);
     }
 
     /**

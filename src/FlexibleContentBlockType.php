@@ -2,7 +2,7 @@
 
 namespace Codelight\ACFBlocks;
 
-if (!defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
     exit;
 }
 
@@ -11,12 +11,18 @@ if (!defined('ABSPATH')) {
  *
  * @package Codelight\PageBuilder
  */
-class FlexibleContentBlockType extends BlockType
+abstract class FlexibleContentBlockType extends BlockType
 {
     use BlockTypeRegistryTrait;
 
     /* @var BlockTypeRegistry */
     protected $blockTypeRegistry;
+
+    public function __construct(BlockTypeRegistry $blockTypeRegistry, array $config = [])
+    {
+        $this->blockTypeRegistry = $blockTypeRegistry;
+        parent::__construct($config);
+    }
 
     /**
      * Set up the main flexible content field,
@@ -24,7 +30,6 @@ class FlexibleContentBlockType extends BlockType
      */
     protected function setup()
     {
-        $this->blockTypeRegistry = new BlockTypeRegistry();
         $this->setupFlexibleContent();
         $this->addCallback([$this, 'renderRegisteredBlocks']);
 
@@ -49,7 +54,7 @@ class FlexibleContentBlockType extends BlockType
     public function registerBlockType($blockType)
     {
         if (is_string($blockType)) {
-            $blockType = new $blockType();
+            $blockType = \App\sage($blockType);
         }
 
         $this->getFieldsBuilder()
@@ -64,6 +69,7 @@ class FlexibleContentBlockType extends BlockType
      * Get the contained Block objects from this Flexible Content block
      *
      * @param $data
+     *
      * @return array|string
      */
     protected function getBlocks($data, $objectId)
@@ -93,7 +99,7 @@ class FlexibleContentBlockType extends BlockType
 
             // Check if the block type exists, i.e. that this is a valid FC Layout
             // (Old, not cleaned up layouts might still exist in the database)
-            if (!$blockType) {
+            if ( ! $blockType) {
                 // todo: debug mode
                 if (false) {
                     trigger_error(
@@ -102,20 +108,20 @@ class FlexibleContentBlockType extends BlockType
                     );
                 }
                 continue;
-            }   
+            }
 
             // Create the block
             $block = $blockType->createBlock();
-            
+
             // Generate an ID
             $id = $this->findUniqueIndex($blockType->getName(), $blocks);
-            
+
             // Set the ID
             $block->setId($id);
-            
+
             // Set the data (which we already have from ACF)
             $block->setData($layout, $objectId);
-            
+
             // Add it to the list of blocks
             $blocks[$id] = $block;
         }
@@ -127,6 +133,7 @@ class FlexibleContentBlockType extends BlockType
      * Get the registered blocks
      *
      * @param $data
+     *
      * @return array|string
      */
     public function getRegisteredBlockObjects($data)
@@ -140,6 +147,7 @@ class FlexibleContentBlockType extends BlockType
      * Render the registered blocks
      *
      * @param $data
+     *
      * @return array|string
      */
     public function renderRegisteredBlocks($data, $objectId)
@@ -148,7 +156,7 @@ class FlexibleContentBlockType extends BlockType
 
         $blocks = $this->getBlocks($data, $objectId);
         // Create a new Builder, inject the blocks
-        $builder = new ContentBuilder($this->getName(), $blocks);
+        $builder = \App\sage(ContentBuilder::class, ['postId' => $this->getName(), 'blocks' => $blocks]);
 
         // And let it render the blocks
         $data['blocks'] = $builder->getRenderedBlocks();
@@ -162,19 +170,21 @@ class FlexibleContentBlockType extends BlockType
      * @param     $name
      * @param     $blocks
      * @param int $i
+     *
      * @return string
      */
     protected function findUniqueIndex($name, $blocks, $i = 2)
     {
         // No suffix for the first item
-        if (!array_key_exists($name, $blocks)) {
+        if ( ! array_key_exists($name, $blocks)) {
             return $name;
         }
 
         // For the rest of the items, start count from 2
         // e.g. 'itemName-2'
         if (array_key_exists($name . '-' . $i, $blocks)) {
-            $i++;
+            $i ++;
+
             return $this->findUniqueIndex($name, $blocks, $i);
         }
 

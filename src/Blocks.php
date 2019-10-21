@@ -2,7 +2,7 @@
 
 namespace Codelight\ACFBlocks;
 
-if (!defined('ABSPATH')) {
+if ( ! defined('ABSPATH')) {
     exit;
 }
 
@@ -23,9 +23,6 @@ class Blocks
 {
     use BlockTypeRegistryTrait;
 
-    /* @var Blocks */
-    protected static $instance;
-
     /* @var BlockTypeRegistry */
     protected $blockTypeRegistry;
 
@@ -38,10 +35,10 @@ class Blocks
     /**
      * ContentBuilder constructor
      */
-    protected function __construct()
+    protected function __construct(ACF $acf, BlockTypeRegistry $blockTypeRegistry)
     {
-        $this->acf               = new ACF();
-        $this->blockTypeRegistry = new BlockTypeRegistry();
+        $this->acf               = $acf;
+        $this->blockTypeRegistry = $blockTypeRegistry;
     }
 
     /**
@@ -62,12 +59,13 @@ class Blocks
      * Parse the config array, automatically add namespaces if applicable
      *
      * @param $config
+     *
      * @return mixed
      */
     protected function parseConfig($config)
     {
         // If the key 'blocktypes' is not set, we assume that $config is just a simple array of block classes or objects
-        if (!array_key_exists('blocktypes', $config)) {
+        if ( ! array_key_exists('blocktypes', $config)) {
             return $config;
         }
 
@@ -110,8 +108,7 @@ class Blocks
     public function registerBlockType($blockType)
     {
         if (is_string($blockType)) {
-            // Todo: add support for dependency injection
-            $blockType = new $blockType();
+            $blockType = \App\sage($blockType);
         }
 
         // Register the block type in the main registry
@@ -125,6 +122,7 @@ class Blocks
      * Get and populate blocks by post id
      *
      * @param $postId
+     *
      * @return array
      */
     public function getBlocksByPostId($postId)
@@ -137,14 +135,14 @@ class Blocks
             $blockType = $this->blockTypeRegistry->getBlockType($blockTypeName);
 
             // Disregard field groups that are not created using ACF Blocks
-            if (!$blockType) {
+            if ( ! $blockType) {
                 continue;
             }
 
             $block = $blockType->createBlock();
 
             $data = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
-            
+
             $block->setId($blockTypeName);
             $block->setData($data, $postId);
 
@@ -158,6 +156,7 @@ class Blocks
      * Get an instantiated block type object
      *
      * @param $blockTypeName
+     *
      * @return BlockTypeInterface
      */
     public function getBlockType($blockTypeName)
@@ -172,8 +171,9 @@ class Blocks
      */
     public function get($postId = null)
     {
-        $postId = $this->resolvePostId($postId);
+        $postId  = $this->resolvePostId($postId);
         $builder = $this->getBuilder($postId);
+
         return $builder->getRenderedBlocks();
     }
 
@@ -181,12 +181,14 @@ class Blocks
      * Fetch all block objects associated with a given Post without rendering them
      *
      * @param null $postId
+     *
      * @return array
      */
     public function getBlockObjects($postId = null)
     {
-        $postId = $this->resolvePostId($postId);
+        $postId  = $this->resolvePostId($postId);
         $builder = $this->getBuilder($postId);
+
         return $builder->getBlocks();
     }
 
@@ -198,6 +200,7 @@ class Blocks
     public function getGlobal()
     {
         $builder = $this->getBuilder('option');
+
         return $builder->getRenderedBlocks();
     }
 
@@ -205,11 +208,13 @@ class Blocks
      * Fetch all global block objects without rendering them
      *
      * @param null $postId
+     *
      * @return array
      */
     public function getGlobalBlockObjects()
     {
         $builder = $this->getBuilder('option');
+
         return $builder->getBlocks();
     }
 
@@ -223,8 +228,9 @@ class Blocks
      */
     public function getByName($name, $postId = null)
     {
-        $postId = $this->resolvePostId($postId);
+        $postId  = $this->resolvePostId($postId);
         $builder = $this->getBuilder($postId);
+
         return $builder->getBlock($name);
     }
 
@@ -238,8 +244,9 @@ class Blocks
      */
     public function getRenderedBlockByName($name, $postId = null)
     {
-        $postId = $this->resolvePostId($postId);
+        $postId  = $this->resolvePostId($postId);
         $builder = $this->getBuilder($postId);
+
         return $builder->getRenderedBlock($name);
     }
 
@@ -247,13 +254,14 @@ class Blocks
      * Get populated content builder
      *
      * @param $postId
+     *
      * @return ContentBuilder
      */
     public function getBuilder($postId = null)
     {
         $postId = $this->resolvePostId($postId);
 
-        if (!isset($this->builders[$postId])) {
+        if ( ! isset($this->builders[$postId])) {
             $this->builders[$postId] = $this->createContentBuilder($postId);
         }
 
@@ -293,18 +301,7 @@ class Blocks
     protected function createContentBuilder($postId)
     {
         $blocks = $this->getBlocksByPostId($postId);
-        return new ContentBuilder($postId, $blocks);
-    }
 
-    /**
-     * @return Blocks
-     */
-    public static function getInstance()
-    {
-        if (!isset(static::$instance)) {
-            static::$instance = new static();
-        }
-
-        return static::$instance;
+        return \App\sage(ContentBuilder::class, ['postId' => $postId, 'blocks' => $blocks]);
     }
 }
