@@ -39,7 +39,7 @@ class ACF
                 $key1 = $sub['key'];
                 foreach ($sub['sub_fields'] as $sub2) {
                     $key2 = $sub2['key'];
-                    if (array_key_exists($i, $field['value']) && stristr($key2, 'block_admin_label') && $value = $field['value'][$i][$key1][$key2]) {
+                    if (is_array($field['value']) && array_key_exists($i, $field['value']) && stristr($key2, 'block_admin_label') && $value = $field['value'][$i][$key1][$key2]) {
                         return "{$title} - {$value}";
                     }
                 }
