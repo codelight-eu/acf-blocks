@@ -129,9 +129,9 @@ class FlexibleContentBlockType extends BlockType
      * @param $data
      * @return array|string
      */
-    public function getRegisteredBlockObjects($data)
+    public function getRegisteredBlockObjects($data, $objectId)
     {
-        $data['blocks'] = $this->getBlocks($data);
+        $data['blocks'] = $this->getBlocks($data, $objectId);
 
         return $data;
     }
