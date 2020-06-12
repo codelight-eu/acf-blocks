@@ -102,20 +102,20 @@ class FlexibleContentBlockType extends BlockType
                     );
                 }
                 continue;
-            }   
+            }
 
             // Create the block
             $block = $blockType->createBlock();
-            
+
             // Generate an ID
             $id = $this->findUniqueIndex($blockType->getName(), $blocks);
-            
+
             // Set the ID
             $block->setId($id);
-            
+
             // Set the data (which we already have from ACF)
             $block->setData($layout, $objectId);
-            
+
             // Add it to the list of blocks
             $blocks[$id] = $block;
         }
@@ -129,9 +129,9 @@ class FlexibleContentBlockType extends BlockType
      * @param $data
      * @return array|string
      */
-    public function getRegisteredBlockObjects($data)
+    public function getRegisteredBlockObjects($data, $objectId)
     {
-        $data['blocks'] = $this->getBlocks($data);
+        $data['blocks'] = $this->getBlocks($data, $objectId);
 
         return $data;
     }
