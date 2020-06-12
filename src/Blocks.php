@@ -276,6 +276,7 @@ class Blocks
     protected function resolvePostId($postId)
     {
         // todo: sanity checks?
+		$postId = apply_filters('codelight/acf_blocks/post_id', $postId);
 
         $postId = apply_filters('codelight/acf_blocks/post_id', $postId);
 

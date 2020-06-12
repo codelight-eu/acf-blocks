@@ -13,7 +13,7 @@ class Block implements BlockInterface
 
     /* @var string */
     protected $id;
-    
+
     /* @var array */
     protected $data;
 
@@ -74,7 +74,7 @@ class Block implements BlockInterface
                 }
             }
         }
-        
+
         // Pass data through registered callbacks
         // This allows comfortably overriding data if the block type is defined procedurally
         if (is_array($this->blockType->getCallbacks()) && count($this->blockType->getCallbacks())) {
