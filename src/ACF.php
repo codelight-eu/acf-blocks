@@ -72,7 +72,7 @@ class ACF
             if (isset($fieldGroup['location']) && count($fieldGroup['location'])) {
                 foreach ($fieldGroup['location'] as $location) {
                     foreach ($location as $rule) {
-                        if ('options_page' === $rule['param'] && '==' === $rule['operator']) {
+                        if ('options_page' === $rule['param'] && in_array($rule['operator'], ['=', '=='])) {
                             // Remove ACF-s internal prefix
                             $blockTypeNames[] = substr($fieldGroup['key'], 6);
                         }
