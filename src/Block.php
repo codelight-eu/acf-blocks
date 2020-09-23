@@ -79,7 +79,7 @@ class Block implements BlockInterface
         return $this->settings;
     }
 
-    public function setSettings($data, $settings)
+    public function setSettings(array $data, array $settings)
     {
         // If any Settings have been registered, run the data through them
         if (count($this->blockType->getSettings())) {
@@ -99,7 +99,7 @@ class Block implements BlockInterface
      *
      * @param $data
      */
-    public function setData($data, $settings)
+    public function setData(array $data, array $settings)
     {
         // Add ID to the block's data
         // DEPRECATED: remove in v2
