@@ -37,6 +37,15 @@ class Blocks
     protected $builders = [];
 
     /**
+     * Set this to true while in the process of building and rendering blocks.
+     * This allows us to detect if a block is queried from inside another block
+     * and avoid infinite loops.
+     *
+     * @var bool
+     */
+    protected $building = false;
+
+    /**
      * ContentBuilder constructor
      */
     protected function __construct()
@@ -170,6 +179,48 @@ class Blocks
     }
 
     /**
+     * @param $postId
+     * @param array $blockNames
+     * @return array
+     */
+    public function getNamedBlocksByPostId($postId, array $blockNames)
+    {
+        $blocks = [];
+
+        foreach ($blockNames as $blockTypeName) {
+            $blockType = $this->blockTypeRegistry->getBlockType($blockTypeName);
+
+            if (!$blockType) {
+                continue;
+            }
+
+            $block = $blockType->createBlock();
+
+            $block->setId($blockTypeName);
+            $block->setObjectId($postId);
+
+            $data     = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
+            $settings = $this->acf->getPostBlockSettings($postId, $blockType->getFieldsBuilder(), 'settings');
+
+            $block->setRawData($data);
+            $block->setRawSettings($settings);
+
+            $blocks[$blockTypeName] = $block;
+        }
+
+        // On second loop, once each blocks has access to all the blocks' data in the current context.
+        // This allows making decisions based on which specific block comes before or after the current.
+        foreach ($blocks as $blockTypeName => $block) {
+            /* @var $block Block */
+            $block->setBlocks($blocks);
+            $block->setSettings($block->getRawData(), $block->getRawSettings());
+            $block->setData($block->getRawData(), $block->getRawSettings());
+        }
+
+        return $blocks;
+    }
+
+    /**
      * Get an instantiated block type object
      *
      * @param $blockTypeName
@@ -239,7 +290,7 @@ class Blocks
     public function getByName($name, $postId = null)
     {
         $postId  = $this->resolvePostId($postId);
-        $builder = $this->getBuilder($postId);
+        $builder = $this->getBuilder($postId, $name);
         return $builder->getBlock($name);
     }
 
@@ -254,7 +305,7 @@ class Blocks
     public function getRenderedBlockByName($name, $postId = null)
     {
         $postId  = $this->resolvePostId($postId);
-        $builder = $this->getBuilder($postId);
+        $builder = $this->getBuilder($postId, $name);
         return $builder->getRenderedBlock($name);
     }
 
@@ -264,12 +315,24 @@ class Blocks
      * @param $postId
      * @return ContentBuilder
      */
-    public function getBuilder($postId = null)
+    public function getBuilder($postId = null, $blockName = null)
     {
         $postId = $this->resolvePostId($postId);
 
         if (!isset($this->builders[$postId])) {
-            $this->builders[$postId] = $this->createContentBuilder($postId);
+            if (!$this->building) {
+                $this->building = true;
+                $this->builders[$postId] = $this->createContentBuilder($postId);
+            } else {
+                if (!$blockName) {
+                    throw new \Exception('When rendering a block inside another block, you need to provide a block name.');
+                }
+
+                // Create a single-use content builder for the sole purpose of building this single block
+                // without triggering an infinite loop.
+                $this->building = false;
+                return $this->createContentBuilder($postId, $blockName);
+            }
         }
 
         return $this->builders[$postId];
@@ -305,13 +368,18 @@ class Blocks
      * Factory method to create a new ContentBuilder
      *
      * @param $postId
-     * @param $blocks
+     * @param $blockName
      *
      * @return ContentBuilder
      */
-    protected function createContentBuilder($postId)
+    protected function createContentBuilder($postId, $blockName = null)
     {
-        $blocks = $this->getBlocksByPostId($postId);
+        if ($blockName) {
+            $blocks = $this->getNamedBlocksByPostId($postId, [$blockName]);
+        } else {
+            $blocks = $this->getBlocksByPostId($postId);
+        }
+
         return new ContentBuilder($postId, $blocks);
     }
 
