@@ -320,7 +320,7 @@ class Blocks
         $postId = $this->resolvePostId($postId);
 
         if (!isset($this->builders[$postId])) {
-            if (!$this->building) {
+            if (!$this->building || $postId === 'option') {
                 $this->building = true;
                 $this->builders[$postId] = $this->createContentBuilder($postId);
             } else {
