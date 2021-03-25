@@ -46,6 +46,16 @@ class Blocks
     protected $building = false;
 
     /**
+     * @var mixed|null
+     */
+    private $nameSpace;
+
+    /**
+     * @var mixed|null
+     */
+    private $childNameSpace;
+
+    /**
      * ContentBuilder constructor
      */
     protected function __construct()
@@ -63,6 +73,10 @@ class Blocks
     {
         // Parse block types from given config
         $blockTypes = $this->parseConfig($config);
+
+        // Set parent & child namespaces
+        $this->nameSpace      = isset($config['namespace']) ? $config['namespace'] : null;
+        $this->childNameSpace = isset($config['child_namespace']) ? $config['child_namespace'] : null;
 
         // Register blocks from config, if applicable
         $this->registerBlockTypes($blockTypes);
@@ -86,10 +100,20 @@ class Blocks
         if (array_key_exists('namespace', $config) && array_key_exists('blocktypes', $config)) {
 
             // Add trailing slash if it's missing
-            $namespace = rtrim($config['namespace'], '\\') . '\\';
+            $namespace      = rtrim($config['namespace'], '\\') . '\\';
+            $childNamespace = rtrim($config['child_namespace'], '\\') . '\\';
 
             foreach ($config['blocktypes'] as &$blockType) {
                 if (is_string($blockType)) {
+
+                    /**
+                     * Overwrite child block type if exists
+                     */
+                    if (class_exists($childNamespace . $blockType)) {
+                        $blockType = $childNamespace . $blockType;
+                        continue;
+                    }
+
                     $blockType = $namespace . $blockType;
                 }
             }
@@ -321,7 +345,7 @@ class Blocks
 
         if (!isset($this->builders[$postId])) {
             if (!$this->building || $postId === 'option') {
-                $this->building = true;
+                $this->building          = true;
                 $this->builders[$postId] = $this->createContentBuilder($postId);
             } else {
                 if (!$blockName) {
@@ -336,6 +360,26 @@ class Blocks
         }
 
         return $this->builders[$postId];
+    }
+
+    /**
+     * Get namespace
+     *
+     * @return mixed|null
+     */
+    public function getNameSpace()
+    {
+        return $this->nameSpace;
+    }
+
+    /**
+     * Get child namespace
+     *
+     * @return mixed|null
+     */
+    public function getChildNameSpace()
+    {
+        return $this->childNameSpace;
     }
 
     /**

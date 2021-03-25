@@ -50,7 +50,24 @@ class FlexibleContentBlockType extends BlockType
      */
     public function registerBlockType($blockType)
     {
+        /**
+         * Generating the child namespace
+         */
+        $overwrittenNameSpace = str_replace(
+            Blocks::getInstance()->getNameSpace(),
+            Blocks::getInstance()->getChildNameSpace(),
+            $blockType
+        );
+
         if (is_string($blockType)) {
+
+            /**
+             * Overwrite the child block type if exists
+             */
+            if (class_exists($overwrittenNameSpace)) {
+                $blockType = $overwrittenNameSpace;
+            }
+
             $blockType = new $blockType();
         }
 
