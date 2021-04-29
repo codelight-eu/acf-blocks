@@ -7,10 +7,16 @@ use Roots\Sage\Container;
 
 class AcfBlocksServiceProvider extends ServiceProvider
 {
+    public function __construct(\Illuminate\Contracts\Container\Container $container)
+    {
+        parent::__construct($container);
+    }
+
     public $bindings = [
+        BlockTypeRegistry::class,
+        Blocks::class,
         Block::class,
-        ACF::class,
-        BlockTypeRegistry::class
+        ACF::class
     ];
 
     public $autoload = [];

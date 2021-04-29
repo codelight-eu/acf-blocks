@@ -35,7 +35,7 @@ class Blocks
     /**
      * ContentBuilder constructor
      */
-    protected function __construct(ACF $acf, BlockTypeRegistry $blockTypeRegistry)
+    public function __construct(ACF $acf, BlockTypeRegistry $blockTypeRegistry)
     {
         $this->acf               = $acf;
         $this->blockTypeRegistry = $blockTypeRegistry;
