@@ -75,21 +75,21 @@ class ACF
      * @param $postId
      * @return array
      */
-    public function getPostBlockTypeNames($postId)
+    public function getPostFieldGroupNames($postId)
     {
         if ('option' === $postId) {
-            return $this->getGlobalBlockTypeNames();
+            return $this->getGlobalFieldGroupKeys();
         }
 
-        $blockTypeNames = [];
+        $fieldGroupKeys = [];
         $fieldGroups    = acf_get_field_groups(['post_id' => $postId]);
 
         foreach ($fieldGroups as $fieldGroup) {
             // Remove ACF-s internal prefix
-            $blockTypeNames[] = substr($fieldGroup['key'], 6);
+            $fieldGroupKeys[] = substr($fieldGroup['key'], 6);
         }
 
-        return $blockTypeNames;
+        return $fieldGroupKeys;
     }
 
     /**
@@ -97,7 +97,7 @@ class ACF
      *
      * @return array
      */
-    public function getGlobalBlockTypeNames()
+    public function getGlobalFieldGroupKeys()
     {
         $blockTypeNames = [];
         $fieldGroups    = acf_get_field_groups();
@@ -135,13 +135,12 @@ class ACF
         $data = [];
 
         foreach ($fieldGroup['fields'] as $field) {
-
             $data[$field['name']] = get_field($field['key'], $postId);
         }
 
         return $data;
     }
-    
+
     public function getPostBlockSettings($postId, FieldsBuilder $fieldsBuilder, $groupName)
     {
         // acf_get_field_groups() doesn't return the field names, so we'll need to build the

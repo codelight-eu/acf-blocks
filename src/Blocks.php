@@ -130,43 +130,53 @@ class Blocks
      */
     public function getBlocksByPostId($postId)
     {
-        $blocks         = [];
-        $blockTypeNames = $this->acf->getPostBlockTypeNames($postId);
+        $blocks          = [];
+        $FieldGroupNames = $this->acf->getPostFieldGroupNames($postId);
 
         // Set up blocks
-        foreach ($blockTypeNames as $blockTypeName) {
+        foreach ($FieldGroupNames as $FieldGroupName) {
 
-            $blockType = $this->blockTypeRegistry->getBlockType($blockTypeName);
+            $blockTypes = $this->blockTypeRegistry->getBlockTypesByFieldGroupName($FieldGroupName);
 
             // Disregard field groups that are not created using ACF Blocks
-            if (!$blockType) {
+            if (!$blockTypes) {
                 continue;
             }
 
-            $block = $blockType->createBlock();
+            foreach ($blockTypes as $blockTypeName => $blockType){
+                $block = $blockType->createBlock();
 
-            $block->setId($blockTypeName);
-            $block->setObjectId($postId);
+                $block->setId($blockTypeName);
+                $block->setObjectId($postId);
 
-            $data     = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
-            $settings = $this->acf->getPostBlockSettings($postId, $blockType->getFieldsBuilder(), 'settings');
+                $data     = $this->acf->getPostBlockData($postId, $blockType->getFieldsBuilder());
+                $settings = $this->acf->getPostBlockSettings($postId, $blockType->getFieldsBuilder(), 'settings');
 
-            $block->setRawData($data);
-            $block->setRawSettings($settings);
+                $block->setRawData($data);
+                $block->setRawSettings($settings);
 
-            $blocks[$blockTypeName] = $block;
+                $blocks[$blockTypeName] = $block;
+            }
+        }
+
+        // Set blocks in init config order by default
+        $sortedBlocks = [];
+        foreach ($this->blockTypeRegistry->getBlockTypes() as $registeredBlockType){
+            if (isset($blocks[$registeredBlockType->getName()])){
+                $sortedBlocks[$registeredBlockType->getName()] = $blocks[$registeredBlockType->getName()];
+            }
         }
 
         // On second loop, once each blocks has access to all the blocks' data in the current context.
         // This allows making decisions based on which specific block comes before or after the current.
-        foreach ($blocks as $blockTypeName => $block) {
-            /* @var $block Block */
-            $block->setBlocks($blocks);
+        foreach ($sortedBlocks as $blockTypeName => $block) {
+            /* @var Block $block */
+            $block->setBlocks($sortedBlocks);
             $block->setSettings($block->getRawData(), $block->getRawSettings());
             $block->setData($block->getRawData(), $block->getRawSettings());
         }
 
-        return $blocks;
+        return $sortedBlocks;
     }
 
     /**
@@ -177,7 +187,7 @@ class Blocks
      */
     public function getBlockType($blockTypeName)
     {
-        return $this->blockTypeRegistry->getBlockType($blockTypeName);
+        return $this->blockTypeRegistry->getBlockTypes()[$blockTypeName];
     }
 
     /**

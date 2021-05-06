@@ -28,7 +28,7 @@ abstract class Setting implements SettingInterface
             $this->name = $this->config['name'];
         }
 
-        $this->fieldsBuilder = new FieldsBuilder($this->name);
+        $this->fieldsBuilder = new FieldsBuilder(isset($this->config['field_group_name'])?$this->config['field_group_name']:$this->name);
 
         $this->setup();
     }

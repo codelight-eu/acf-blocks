@@ -42,6 +42,6 @@ trait BlockTypeRegistryTrait
      */
     public function getBlockType($name)
     {
-        return $this->blockTypeRegistry->getBlockType($name);
+        return $this->blockTypeRegistry->getBlockTypes()[$name];
     }
 }

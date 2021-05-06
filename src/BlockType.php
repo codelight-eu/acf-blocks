@@ -20,6 +20,9 @@ class BlockType implements BlockTypeInterface
     /* @var string */
     protected $name;
 
+    /* @var string */
+    protected $fieldGroupName;
+
     /* @var array */
     protected $config = [];
 
@@ -47,7 +50,7 @@ class BlockType implements BlockTypeInterface
             $this->name = $this->config['name'];
         }
 
-        $this->fieldsBuilder = new FieldsBuilder($this->name);
+        $this->fieldsBuilder = new FieldsBuilder(isset($this->config['field_group_name'])?$this->config['field_group_name']:$this->name);
 
         $this->setup();
     }
@@ -96,7 +99,7 @@ class BlockType implements BlockTypeInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {

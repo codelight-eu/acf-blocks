@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  */
 class BlockTypeRegistry
 {
-    /* @var array */
+    /* @var BlockTypeInterface[] */
     protected $blockTypes;
 
     /**
@@ -28,16 +28,21 @@ class BlockTypeRegistry
     /**
      * Get a block by its unique name
      *
-     * @param $name
-     * @return BlockTypeInterface
+     * @param $fieldGroupName
+     *
+     * @return BlockTypeInterface[]
      */
-    public function getBlockType($name)
+    public function getBlockTypesByFieldGroupName($fieldGroupName)
     {
-        if (isset($this->blockTypes[$name])) {
-            return $this->blockTypes[$name];
+        $blockTypes = [];
+        /* @var BlockTypeInterface $blockType */
+        foreach ($this->blockTypes as $blockType){
+            if ($blockType->getFieldsBuilder()->getName() == $fieldGroupName){
+                $blockTypes[$blockType->getName()]=$blockType;
+            }
         }
 
-        return null;
+        return $blockTypes;
     }
 
     /**
