@@ -14,7 +14,7 @@ if (defined('CODELIGHT_ACF_BLOCKS_DISALLOW_HELPERS') && CODELIGHT_ACF_BLOCKS_DIS
  */
 if (!function_exists('blocks')) {
     function blocks() {
-        return app(\Codelight\ACFBlocks\Blocks::class);
+        return function_exists('app') ? app(\Codelight\ACFBlocks\Blocks::class) : \Codelight\ACFBlocks\Blocks::getInstance();
     }
 }
 
