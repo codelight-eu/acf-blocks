@@ -197,9 +197,18 @@ class Blocks
      */
     public function get($postId = null)
     {
-        $postId  = $this->resolvePostId($postId);
         $builder = $this->getBuilder($postId);
-        return $builder->getRenderedBlocks();
+        $blocks = $builder->getRenderedBlocks();
+
+        // Set blocks in init config order by default
+        $sortedBlocks = [];
+        foreach ($this->blockTypeRegistry->getBlockTypes() as $registeredBlockType){
+            if (isset($blocks[$registeredBlockType->getName()])){
+                $sortedBlocks[$registeredBlockType->getName()] = $blocks[$registeredBlockType->getName()];
+            }
+        }
+
+        return $sortedBlocks;
     }
 
     /**
