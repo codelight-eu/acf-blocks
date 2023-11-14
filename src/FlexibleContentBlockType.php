@@ -68,7 +68,7 @@ class FlexibleContentBlockType extends BlockType
      * @param $data
      * @return array|string
      */
-    protected function getBlocks($data, $objectId)
+    protected function getBlocks($data, $objectId = null)
     {
         /**
          * Fetch the data of the main flexible content field.
